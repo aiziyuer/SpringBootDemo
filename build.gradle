@@ -1,0 +1,74 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.8.RELEASE'
+	}
+	repositories {
+        maven{url "https://plugins.gradle.org/m2/"}
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "net.ltgt.gradle:gradle-apt-plugin:0.12"
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: "net.ltgt.apt"
+
+compileJava {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+    options.encoding = 'UTF-8'
+}
+
+group = 'com.aiziyuer'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+
+    // 配置Lombok
+    compileOnly 'org.projectlombok:lombok:1.16.18'
+    apt "org.projectlombok:lombok:1.16.18"
+
+	// 配置Log4j
+	String LOG4J_VERSION = '2.1'
+	compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: LOG4J_VERSION
+	compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: LOG4J_VERSION
+
+
+    // 通用工具包
+    compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.8.3'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
+    compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
+
+    // SpringBoot
+	compile('org.springframework.boot:spring-boot-starter-web')
+	runtime('org.springframework.boot:spring-boot-devtools')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+// --------------- IDE 配置 开始 ------------------
+apply plugin: "eclipse"
+eclipse {
+    classpath {
+        // 配置下载源码和javadoc
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
+apply plugin: "idea"
+
+idea {
+    module {
+        // 配置下载源码和javadoc
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+// --------------- IDE 配置 结束 ------------------
